@@ -35,7 +35,7 @@
 }
 
 
-#p1B {
+.bullet {
   height: 1px;
   width: 1px;
   background-color: orange;
@@ -47,23 +47,15 @@
   left:50px;
 }
 
-#p2B {
- height: 1px;
- width: 1px;
+.green {
  background-color: green;
- padding: 4px;
- margin: auto;
- display:inline;
- position:absolute;
- top: 19px;
- left:50px;
 }
 
 #p1 {
   height: 20px;
   width: 50px;
-  background-color: red;
   position: absolute;
+  background-image: url(player1.png);
   top: 200px;
   left:0;
 }
@@ -71,7 +63,7 @@
 #p2 {
   height: 20px;
   width: 50px;
-  background-color: blue;
+  background-image: url(player2.png);
   position: absolute;
   top: 300px;
   left:0;
@@ -80,7 +72,7 @@
 .enemy {
   height: 20px;
   width: 50px;
-  background-color: purple;
+  background-image: url(enemy.png);
 }
 
 #enemy1{
@@ -121,17 +113,26 @@
 #enemy8{
   position:absolute;
   top: 95px;
-  left: 1400px;
+  left: 1250px;
 }
 #enemy9{
   position:absolute;
   top: 342px;
-  left: 1600px;
+  left: 1300px;
 }
-#enemy10{
+ #enemy10{
   position:absolute;
   top: 400px;
-  left: 1800px;
+  left: 1400px;
+}
+
+#boss {
+  position:absolute;
+  top: 50px;
+  left: 1450px;
+  height: 400px;
+  width: 600px;
+  background-image: url(Boss.png);
 }
 
 .start {
