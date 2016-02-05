@@ -47,8 +47,23 @@
   left:50px;
 }
 
+.eBullet {
+  height: 1px;
+  width: 1px;
+  background-color: red;
+  padding: 4px;
+  margin: auto;
+  display:inline;
+  position:absolute;
+  top: 19px;
+  left:50px;
+}
 .green {
  background-color: green;
+}
+
+.red {
+  background-color: red;
 }
 
 #p1 {
@@ -126,7 +141,7 @@
   left: 1400px;
 }
 
-#boss {
+#enemy11 {
   position:absolute;
   top: 50px;
   left: 1450px;

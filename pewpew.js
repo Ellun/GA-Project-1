@@ -29,12 +29,22 @@ function newGame () {
 //creates starting ships
 function shipFactory() {
   $allies.empty();
-  $allies.append('<div class="ship" id="p1"></div>');
+  var player = null;
+  for (var i = 1; i < 3; i++) {
+    if (i === 1) {
+      player = new Player1();
+    } else if (i === 2) {
+      player = new Player2();
+    }
+    var $player = $('<div>');
+    $player.addClass('player');
+    $player.attr('id', 'p' + i)
+    $player.attr('health', player.health);
+    $player.attr('score', player.score);
+    $allies.append($player);
+  }
   $p1 = $('#p1');
-  $p1.score = 0;
-  $allies.append('<div class="ship" id="p2"></div>');
   $p2 = $('#p2');
-  $p2.score = 0;
 }
 
 $(document).on('keydown', function (event) {
@@ -95,7 +105,7 @@ function onKeyDown($player, action) {
 function enemyFactory () {
   $('.enemies').empty();
   $boss = $('<div>');
-  $boss.attr('id','boss');
+  $boss.attr('id','enemy11');
   $('.enemies').append($boss);
   for (var i = 1; i <= 10; i++) {
     var currentEnemy = null;
@@ -120,10 +130,11 @@ function enemyFactory () {
         break;
     }
     currentEnemy.id = 'enemy' + i;
-    $enemy = $('<div>');
+    var $enemy = $('<div>');
     $enemy.addClass('enemy');
     $enemy.attr('id', currentEnemy.id);
     $enemy.attr('health',currentEnemy.health)
+    $boss.attr('health', 10000);
     $('.enemies').append($enemy);
     enemies.push(currentEnemy);
     var loop = 0;
@@ -134,11 +145,34 @@ function enemyFactory () {
         loop++;
       } else {
         $enemy.animate({'top':'480px'},currentEnemy.speed);
-        $boss.animate({'top':'100px'},3000);
+        $boss.animate({'top':'100px'},3000);;
         loop++;
         }
     }
-  }
+    (function(enemy) {
+    setInterval(function(){
+      var randomID = makeid();
+      enemy.append('<div class="eBullet" id="' + randomID + '"></div>');
+      var $eBullet = $('.eBullet', enemy);
+      $eBullet.animate({'left':'-300px'},2990);
+      //checkEnemy($eBullet);
+      setTimeout(function() {
+        enemy.empty();
+      }, 2990);
+     }, 3000);
+  })($enemy);
+}
+}
+function Player1() {
+  this.health = 1000;
+  this.id = '';
+  this.score = 0;
+}
+
+function Player2() {
+  this.health = 1000;
+  this.id = '';
+  this.score = 0;
 }
 
 function Grunt() {
@@ -164,8 +198,6 @@ function GiantGrunt() {
   this.id = '';
   this.speed = 6000;
 }
-
-
 
 function bulletFactory($player) {
   //generate random ID
@@ -204,9 +236,9 @@ function makeid() {
 
 //Collision Detection
 //https://developer.mozilla.org/en-US/docs/Games/Techniques/2D_collision_detection
-function check($player) {
+function check($player,target) {
   var $enemyContainer = $('.enemies');
-  for (var i = 1; i <= 10; i++) {
+  for (var i = 1; i <= 11; i++) {
     var $hitEnemy = $enemyContainer.find('#enemy' + i);
     if (
       parseInt($player.css('left'))  < (parseInt($hitEnemy.css('left')) + parseInt($hitEnemy.css('width'))) &&
@@ -217,7 +249,44 @@ function check($player) {
       console.log($hitEnemy.attr('health'));
       var previousHealth = $hitEnemy.attr('health')
       $hitEnemy.attr('health',(previousHealth - 100));
-      $player.score += 250;
+      if ($player === $p1) {
+        var previousScore = parseInt($player.attr('score'));
+        $player.attr('score',(previousScore + 250));
+        console.log($player.attr('score'));
+        $score.text($player.attr('score'));
+      }
+      if ($player === $p2) {
+        var previousScore = parseInt($player.attr('score'));
+        $player.attr('score',(previousScore + 250));
+        $score2.text($player.attr('score'));
+      }
+      if ($hitEnemy.attr('health') <= 0) {
+        $hitEnemy.remove();
+        if( $('.enemies').is(':empty') ) {
+          
+      //   window.setTimeout(function() {
+      //   $hitEnemy.remove();
+      // }, 1200);
+      }
+    }
+  }
+}
+}
+function checkEnemy($eBullet) {
+  for (var i = 1; i <= 11; i++) {
+
+    if (
+      parseInt($eBullet.css('left'))  < (parseInt($hitEnemy.css('left')) + parseInt($hitEnemy.css('width'))) &&
+      (parseInt($eBullet.css('left')) + parseInt($eBullet.css('width')) + 400) > parseInt($hitEnemy.css('left')) &&
+      parseInt($eBullet.css('top')) < (parseInt($hitEnemy.css('top')) + parseInt($hitEnemy.css('height'))) &&
+      (parseInt($eBullet.css('height')) + parseInt($eBullet.css('top'))) > parseInt($hitEnemy.css('top'))
+    ){
+      console.log($hitEnemy.attr('health'));
+      var previousHealth = $hitEnemy.attr('health');
+      $hitEnemy.attr('health',(previousHealth - 100));
+      var previousScore = $player.attr('score');
+      $player.attr('score',(previousScore + 250));
+      console.log(previousHealth);
       if ($hitEnemy.attr('health') <= 0) {
         console.log('hey');
         $hitEnemy.remove();
