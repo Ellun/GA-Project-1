@@ -100,25 +100,30 @@ function enemyFactory () {
   for (var i = 1; i <= 10; i++) {
     var currentEnemy = null;
     var randomNumber = Math.floor(Math.random()*4);
-    console.log(randomNumber);
+    //console.log(randomNumber);
     switch (randomNumber) {
       case 0:
         currentEnemy = new Grunt();
+        console.log(0);
         break;
       case 1:
         currentEnemy = new FatGrunt();
+        console.log(1);
         break;
       case 2:
         currentEnemy = new BigGrunt();
+        console.log(2);
         break;
       case 3:
         currentEnemy = new GiantGrunt();
+        console.log(3);
         break;
     }
     currentEnemy.id = 'enemy' + i;
     $enemy = $('<div>');
     $enemy.addClass('enemy');
     $enemy.attr('id', currentEnemy.id);
+    $enemy.attr('health',currentEnemy.health)
     $('.enemies').append($enemy);
     enemies.push(currentEnemy);
     var loop = 0;
@@ -154,7 +159,6 @@ function BigGrunt() {
   this.speed = 4000;
 }
 
-
 function GiantGrunt() {
   this.health = 400;
   this.id = '';
@@ -172,7 +176,7 @@ function bulletFactory($player) {
     $bullet.addClass('green');
   }
   //https://www.youtube.com/watch?v=PyS35523130
-  $bullet.animate({'left':'600px'},1200);
+  $bullet.animate({'left':'400px'},1200);
   //http://stackoverflow.com/questions/3655627/jquery-append-object-remove-it-with-delay
   setTimeout(function() {
     $player.empty();
@@ -189,70 +193,38 @@ function makeid() {
   return text;
 }
 
-function getEnemyById(id) {
-  for (var i = 1; i <= 10; i++) {
-    if (enemies[i].id === id) {
-      return enemies[i];
-    }
-  }
-  return null;
-}
+// function getEnemyById(id) {
+//   for (var i = 1; i <= 10; i++) {
+//     if (enemies[i].id === id) {
+//       return enemies[i];
+//     }
+//   }
+//   return null;
+// }
 
 //Collision Detection
 //https://developer.mozilla.org/en-US/docs/Games/Techniques/2D_collision_detection
 function check($player) {
+  var $enemyContainer = $('.enemies');
   for (var i = 1; i <= 10; i++) {
-    if (parseInt($player.css('left'))  < parseInt($enemy.attr('id', 'enemy' + i).css('left')) + parseInt($enemy.attr('id', 'enemy' + i).css('width')) &&
-      parseInt($player.css('left')) + parseInt($player.css('width')) + 500 > parseInt($enemy.attr('id', 'enemy' + i).css('left')) &&
-      parseInt($player.css('top')) < parseInt($enemy.attr('id', 'enemy' + i).css('top')) + parseInt($enemy.attr('id', 'enemy' + i).css('height'))&&
-      parseInt($player.css('height')) + parseInt($player.css('top')) > parseInt($enemy.attr('id', 'enemy' + i).css('top')))
-      {
-      var currentEnemy = getEnemyById('enemy' + i);
-      console.log('hey');
-      currentEnemy.health -= 100;
+    var $hitEnemy = $enemyContainer.find('#enemy' + i);
+    if (
+      parseInt($player.css('left'))  < (parseInt($hitEnemy.css('left')) + parseInt($hitEnemy.css('width'))) &&
+      (parseInt($player.css('left')) + parseInt($player.css('width')) + 400) > parseInt($hitEnemy.css('left')) &&
+      parseInt($player.css('top')) < (parseInt($hitEnemy.css('top')) + parseInt($hitEnemy.css('height'))) &&
+      (parseInt($player.css('height')) + parseInt($player.css('top'))) > parseInt($hitEnemy.css('top'))
+    ){
+      console.log($hitEnemy.attr('health'));
+      var previousHealth = $hitEnemy.attr('health')
+      $hitEnemy.attr('health',(previousHealth - 100));
       $player.score += 250;
-      //$score2.text(score2);
-      if (currentEnemy.health <= 0) {
-        setTimeout(function() {
-        //var deads = "$('#" + currentEnemy.id + "')";
-        $('#' + currentEnemy.id).remove();
-        //$deads.remove();
-      }, 1200);
+      if ($hitEnemy.attr('health') <= 0) {
+        console.log('hey');
+        $hitEnemy.remove();
+      //   window.setTimeout(function() {
+      //   $hitEnemy.remove();
+      // }, 1200);
       }
     }
   }
 }
-
-// function check2() {
-//     if (parseInt($p2B.css('left'))  < parseInt($boss.css('left')) + parseInt($boss.css('width')) &&
-//        parseInt($p2B.css('left')) + parseInt($p2B.css('width')) + 500 > parseInt($boss.css('left')) &&
-//        parseInt($p2.css('top')) < parseInt($boss.css('top')) + parseInt($boss.css('height'))&&
-//        parseInt($p2.css('height')) + parseInt($p2.css('top')) > parseInt($boss.css('top')))
-//       {
-//          bossHealth -= 100;
-//          player.score += 250;
-//          //$score2.text(score2);
-//          if (bossHealth <= 0) {
-//            setTimeout(function() {
-//              $('#boss').remove();
-//            }, 0.5);
-//          }
-//        }
-// }
-
-// function check3() {
-//     if (parseInt($p1B.css('left'))  < parseInt($boss.css('left')) + parseInt($boss.css('width')) &&
-//        parseInt($p1B.css('left')) + parseInt($p1B.css('width')) + 500 > parseInt($boss.css('left')) &&
-//        parseInt($p1.css('top')) < parseInt($boss.css('top')) + parseInt($boss.css('height'))&&
-//        parseInt($p1.css('height')) + parseInt($p1.css('top')) > parseInt(boss.css('top')))
-//       {
-//          bossHealth -= 100;
-//          score += 250;
-//          $score.text(score);
-//          if (bossHealth <= 0) {
-//            setTimeout(function() {
-//              $('#boss').remove();
-//            }, 0.5);
-//          }
-//        }
-// }
