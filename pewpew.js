@@ -4,6 +4,8 @@ var $start = $('.start');
 var enemies = [];
 var $score = $('#p1Score');
 var $score2 = $('#p2Score');
+var $health = $('#p1Health');
+var $health2 = $('#p2Health');
 var $p1 = $('#p1');
 var $p2 = $('#p2');
 var score = 0;
@@ -41,13 +43,20 @@ function shipFactory() {
     $player.attr('id', 'p' + i)
     $player.attr('health', player.health);
     $player.attr('score', player.score);
+    $player.attr('lives', player.lives);
     $allies.append($player);
   }
   $p1 = $('#p1');
   $p2 = $('#p2');
 }
 
+//http://stackoverflow.com/questions/7298507/move-element-with-keypress-multiple
+setInterval(onKeyDown, 20);
+var keys = {};
+
 $(document).on('keydown', function (event) {
+  keys[event.keyCode] = true;
+  console.log(keys);
   switch (event.keyCode) {
     case 87:
       onKeyDown($p1, 'up');
@@ -82,19 +91,24 @@ $(document).on('keydown', function (event) {
     }
 });
 
+$(document).on('keyup', function(event) {
+    delete keys[event.keyCode];
+});
+
+
 function onKeyDown($player, action) {
   switch (action) {
     case 'up':
-      $player.animate({'top':'-=4px'},{duration: 0.05, queue:false});
+      $player.animate({'top':'-=4px'},0);
       break;
     case 'down':
-      $player.animate({'top':'+=4px'},{duration: 0.05, queue:false});
+      $player.animate({'top':'+=4px'},0);
       break;
     case 'left':
-      $player.animate({'left':'-=10px'},{duration: 0.05, queue:false});
+      $player.animate({'left':'-=10px'},0);
       break;
     case 'right':
-      $player.animate({'left':'+=10px'},{duration: 0.05, queue:false});
+      $player.animate({'left':'+=10px'},0);
       break;
     case 'shoot':
       bulletFactory($player);
@@ -141,11 +155,11 @@ function enemyFactory () {
     while (loop < 500) {
       if (loop % 2 === 0) {
         $enemy.animate({'top':'0px'},currentEnemy.speed);
-        $boss.animate({'top':'0px'},3000);
+        $boss.animate({'top':'0px'},1750);
         loop++;
       } else {
         $enemy.animate({'top':'480px'},currentEnemy.speed);
-        $boss.animate({'top':'100px'},3000);;
+        $boss.animate({'top':'300px'},1750);;
         loop++;
         }
     }
@@ -153,26 +167,37 @@ function enemyFactory () {
     setInterval(function(){
       var randomID = makeid();
       enemy.append('<div class="eBullet" id="' + randomID + '"></div>');
+      $boss.append('<div class="giantBullet"></div>','<div class="mediumBullet"></div>','<div class="mediumBullet2"></div>');
       var $eBullet = $('.eBullet', enemy);
-      $eBullet.animate({'left':'-300px'},2990);
-      //checkEnemy($eBullet);
+      var $giantBullet = $('.giantBullet');
+      var $mediumBullet = $('.mediumBullet');
+      var $mediumBullet2 = $('.mediumBullet2 ');
+      $eBullet.animate({'left':'-400px'},2990);
+      $giantBullet.animate({'left':'-300px'},2990);
+      $mediumBullet.animate({'left':'-300px'},2990);
+      $mediumBullet2.animate({'left':'-300px'},2990);
+      checkEnemy(enemy, 400);
+      checkEnemy($boss, 300);
       setTimeout(function() {
         enemy.empty();
+        $boss.empty();
       }, 2990);
-     }, 3000);
+    }, 3000);
   })($enemy);
 }
 }
 function Player1() {
-  this.health = 1000;
+  this.health = 3000;
   this.id = '';
   this.score = 0;
+  this.lives = 3;
 }
 
 function Player2() {
-  this.health = 1000;
+  this.health = 3000;
   this.id = '';
   this.score = 0;
+  this.lives = 3;
 }
 
 function Grunt() {
@@ -204,9 +229,6 @@ function bulletFactory($player) {
   var randomID = makeid();
   $player.append('<div class="bullet" id="' + randomID + '"></div>');
   var $bullet = $('#' + randomID);
-  if ($player === $p2) {
-    $bullet.addClass('green');
-  }
   //https://www.youtube.com/watch?v=PyS35523130
   $bullet.animate({'left':'400px'},1200);
   //http://stackoverflow.com/questions/3655627/jquery-append-object-remove-it-with-delay
@@ -225,15 +247,6 @@ function makeid() {
   return text;
 }
 
-// function getEnemyById(id) {
-//   for (var i = 1; i <= 10; i++) {
-//     if (enemies[i].id === id) {
-//       return enemies[i];
-//     }
-//   }
-//   return null;
-// }
-
 //Collision Detection
 //https://developer.mozilla.org/en-US/docs/Games/Techniques/2D_collision_detection
 function check($player,target) {
@@ -246,54 +259,68 @@ function check($player,target) {
       parseInt($player.css('top')) < (parseInt($hitEnemy.css('top')) + parseInt($hitEnemy.css('height'))) &&
       (parseInt($player.css('height')) + parseInt($player.css('top'))) > parseInt($hitEnemy.css('top'))
     ){
-      console.log($hitEnemy.attr('health'));
       var previousHealth = $hitEnemy.attr('health')
       $hitEnemy.attr('health',(previousHealth - 100));
+      var previousScore = parseInt($player.attr('score'));
+      $player.attr('score',(previousScore + 250));
       if ($player === $p1) {
-        var previousScore = parseInt($player.attr('score'));
-        $player.attr('score',(previousScore + 250));
-        console.log($player.attr('score'));
         $score.text($player.attr('score'));
       }
       if ($player === $p2) {
-        var previousScore = parseInt($player.attr('score'));
-        $player.attr('score',(previousScore + 250));
         $score2.text($player.attr('score'));
       }
       if ($hitEnemy.attr('health') <= 0) {
         $hitEnemy.remove();
-        if( $('.enemies').is(':empty') ) {
-          
-      //   window.setTimeout(function() {
-      //   $hitEnemy.remove();
-      // }, 1200);
-      }
-    }
-  }
-}
-}
-function checkEnemy($eBullet) {
-  for (var i = 1; i <= 11; i++) {
 
-    if (
-      parseInt($eBullet.css('left'))  < (parseInt($hitEnemy.css('left')) + parseInt($hitEnemy.css('width'))) &&
-      (parseInt($eBullet.css('left')) + parseInt($eBullet.css('width')) + 400) > parseInt($hitEnemy.css('left')) &&
-      parseInt($eBullet.css('top')) < (parseInt($hitEnemy.css('top')) + parseInt($hitEnemy.css('height'))) &&
-      (parseInt($eBullet.css('height')) + parseInt($eBullet.css('top'))) > parseInt($hitEnemy.css('top'))
-    ){
-      console.log($hitEnemy.attr('health'));
-      var previousHealth = $hitEnemy.attr('health');
-      $hitEnemy.attr('health',(previousHealth - 100));
-      var previousScore = $player.attr('score');
-      $player.attr('score',(previousScore + 250));
-      console.log(previousHealth);
-      if ($hitEnemy.attr('health') <= 0) {
-        console.log('hey');
-        $hitEnemy.remove();
+
       //   window.setTimeout(function() {
       //   $hitEnemy.remove();
       // }, 1200);
       }
     }
   }
+}
+function checkEnemy($eBullet, distance) {
+  var $alliesContainer = $('.allies');
+  for (var i = 1; i <= 2; i++) {
+    var $hitPlayer = $alliesContainer.find('#p' + i);
+    if (
+      parseInt($eBullet.css('left'))  > (parseInt($hitPlayer.css('left')) + parseInt($hitPlayer.css('width'))) &&
+      (parseInt($eBullet.css('left')) - parseInt($eBullet.css('width')) - distance) < parseInt($hitPlayer.css('left')) &&
+      parseInt($eBullet.css('top')) < (parseInt($hitPlayer.css('top')) + parseInt($hitPlayer.css('height'))) &&
+      (parseInt($eBullet.css('height')) + parseInt($eBullet.css('top'))) > parseInt($hitPlayer.css('top'))
+    ){
+      var previousHealth = parseInt($hitPlayer.attr('health'));
+      $hitPlayer.attr('health',(previousHealth - 100));
+      if ($hitPlayer === $('#p1')) {
+        $health.text($hitPlayer.attr('health'));
+      }
+      if ($hitPlayer === $p2) {
+        $health2.text($hitPlayer.attr('health'));
+      }
+      if ($hitPlayer.attr('health') <= 0) {
+        var previousLives = $hitPlayer.attr('lives');
+        $hitPlayer.attr('lives',(previousLives - 1));
+        $hitPlayer.attr('health',(3000));
+        if ($hitPlayer.attr('lives') <= 0) {
+          $hitPlayer.remove();
+          //http://stackoverflow.com/questions/14535733/how-to-check-if-div-element-is-empty
+          if( $('.allies').is(':empty') ) {
+          endGame();
+        }
+
+      //   window.setTimeout(function() {
+      //   $hitEnemy.remove();
+      // }, 1200);
+      }
+    }
+  }
+}
+}
+
+function endGame() {
+  var $gg = $('<div>');
+  $gg.addClass('gg');
+  $gg.text('GAME OVER')
+  $gameConsole.append($gg);
 }

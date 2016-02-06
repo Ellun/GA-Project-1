@@ -1,3 +1,6 @@
+body {
+  background-color: black;
+}
 .scoreBoard {
   position: absolute;
 }
@@ -34,12 +37,42 @@
   display: inline;
 }
 
+#p1Health {
+  background-color: blue;
+  border: none;
+  color: white;
+  padding: 20px 38px;
+  text-align: center;
+  font-size: 20px;
+  float: right;
+  position: fixed;
+  left: 156px;
+  top: 0px;
+  height: 20px;
+  width: 80px;
+  display: inline;
+}
 
+#p2Health {
+  background-color: blue;
+  border: none;
+  color: white;
+  padding: 20px 38px;
+  text-align: center;
+  font-size: 20px;
+  float: right;
+  position: fixed;
+  right: 156px;
+  top: 0px;
+  height: 20px;
+  width: 80px;
+  display: inline;
+}
 .bullet {
-  height: 1px;
-  width: 1px;
-  background-color: orange;
-  padding: 4px;
+  height: 3px;
+  width: 10px;
+  background-image: url("long bullet.png");
+  padding: 0px;
   margin: auto;
   display:inline;
   position:absolute;
@@ -48,29 +81,58 @@
 }
 
 .eBullet {
-  height: 1px;
-  width: 1px;
-  background-color: red;
-  padding: 4px;
+  height: 3px;
+  width: 10px;
+  background-image: url("long bullet.png");
+  padding: 0px;
   margin: auto;
   display:inline;
   position:absolute;
   top: 19px;
-  left:50px;
-}
-.green {
- background-color: green;
+  left:0px;
 }
 
-.red {
-  background-color: red;
+.giantBullet {
+  height: 25px;
+  width: 200px;
+  background-image: url("giantBullet.png");
+  padding: 0px;
+  margin: auto;
+  display:inline;
+  position:absolute;
+  top: 100px;
+  left:-175px;
+}
+
+.mediumBullet {
+  height: 10px;
+  width: 150px;
+  background-image: url("mediumBullet.png");
+  padding: 0px;
+  margin: auto;
+  display:inline;
+  position:absolute;
+  top: 50px;
+  left:-175px;
+}
+
+.mediumBullet2 {
+  height: 10px;
+  width: 150px;
+  background-image: url("mediumBullet.png");
+  padding: 0px;
+  margin: auto;
+  display:inline;
+  position:absolute;
+  top: 150px;
+  left:-175px;
 }
 
 #p1 {
   height: 20px;
   width: 50px;
   position: absolute;
-  background-image: url(player1.png);
+  background-image: url(players.png);
   top: 200px;
   left:0;
 }
@@ -78,7 +140,7 @@
 #p2 {
   height: 20px;
   width: 50px;
-  background-image: url(player2.png);
+  background-image: url(players2.png);
   position: absolute;
   top: 300px;
   left:0;
@@ -145,9 +207,9 @@
   position:absolute;
   top: 50px;
   left: 1450px;
-  height: 400px;
+  height: 200px;
   width: 600px;
-  background-image: url(Boss.png);
+  background-image: url(smoothboss.png);
 }
 
 .start {
@@ -157,10 +219,10 @@
   padding: 20px 38px;
   text-align: center;
   font-size: 20px;
+  position: fixed;
   margin: auto;
-  position: absolute;
-  left: 270px;
-  top: 200px;
+  top: 40%;
+  left: 40%;
 }
 
 .gameConsole {
@@ -170,4 +232,17 @@
   height: 500px;
   width: 2000px;
   top: 60px;
+}
+
+.gg {
+  background-color: #4CAF50; /* Green */
+  border: none;
+  color: white;
+  padding: 20px 38px;
+  text-align: center;
+  font-size: 20px;
+  position: fixed;
+  margin: auto;
+  top: 40%;
+  left: 40%;
 }
