@@ -1,71 +1,69 @@
 body {
   background-color: black;
 }
+
+
 .scoreBoard {
   position: absolute;
 }
 
 #p1Score {
-  background-color: #4CAF50; /* Green */
+  background-color: red;
   border: none;
   color: white;
-  padding: 20px 38px;
   text-align: center;
   font-size: 20px;
   float: left;
   position: fixed;
   left: 0px;
   top: 0px;
-  height: 20px;
-  width: 80px;
+  height: 40px;
+  width: 160px;
   display: inline;
 }
 
 #p2Score {
-  background-color: #4CAF50; /* Green */
+  background-color: red;
   border: none;
   color: white;
-  padding: 20px 38px;
   text-align: center;
   font-size: 20px;
   float: right;
   position: fixed;
   right: 0px;
   top: 0px;
-  height: 20px;
-  width: 80px;
+  height: 40px;
+  width: 160px;
   display: inline;
 }
 
 #p1Health {
-  background-color: blue;
+  background-image: url("health.png");
   border: none;
-  color: white;
-  padding: 20px 38px;
+  color: black;
   text-align: center;
   font-size: 20px;
-  float: right;
+  float: left;
   position: fixed;
-  left: 156px;
+  left: 160px;
   top: 0px;
-  height: 20px;
-  width: 80px;
+  height: 40px;
+  width: 160px;
   display: inline;
 }
 
 #p2Health {
-  background-color: blue;
+  background-image: url("health.png");
   border: none;
-  color: white;
-  padding: 20px 38px;
+  color: black;
   text-align: center;
   font-size: 20px;
   float: right;
   position: fixed;
-  right: 156px;
+  right: 160px;
   top: 0px;
-  height: 20px;
-  width: 80px;
+  height: 40px;
+  width: 160px;
   display: inline;
 }
 .bullet {
@@ -221,17 +219,30 @@ body {
   font-size: 20px;
   position: fixed;
   margin: auto;
-  top: 40%;
-  left: 40%;
+  top: 0%;
+  left: 43%;
 }
 
+.info {
+  background-color: #4CAF50; /* Green */
+  border: none;
+  color: white;
+  padding: 20px 38px;
+  text-align: center;
+  font-size: 20px;
+  position: fixed;
+  margin: auto;
+  top: 10%;
+  left: 28%;
+}
 .gameConsole {
   margin:auto;
   position:relative;
   background-image: url(space.png);
-  height: 500px;
-  width: 2000px;
+  height: 600px;
+  width: 2200px;
   top: 60px;
+  left:0px;
 }
 
 .gg {

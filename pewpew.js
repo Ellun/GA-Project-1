@@ -12,6 +12,8 @@ var score = 0;
 var score2 = 0;
 var $gameConsole = $('.gameConsole');
 var bossHealth = 10000;
+var $gg = $('<div>');
+var $info = $('.info');
 
 //source http://stackoverflow.com/questions/2249203/
 //check-if-the-spacebar-is-being-pressed-and-the-mouse-is-moving-at-the-same-time
@@ -19,12 +21,18 @@ var bossHealth = 10000;
 //will creat enemies on start
 $start.on('click',newGame);
 
+function reset() {
+  $gg.remove();
+  newGame();
+}
+
 function newGame () {
   shipFactory();
   enemyFactory();
-  $gameConsole.animate({'right':'720px'},60000);
+  $gameConsole.animate({'left':'-780px'},60000);
   setTimeout(function() {
     $start.remove();
+    $info.remove();
   },1);
 }
 
@@ -56,7 +64,6 @@ var keys = {};
 
 $(document).on('keydown', function (event) {
   keys[event.keyCode] = true;
-  console.log(keys);
   switch (event.keyCode) {
     case 87:
       onKeyDown($p1, 'up');
@@ -124,23 +131,18 @@ function enemyFactory () {
   for (var i = 1; i <= 10; i++) {
     var currentEnemy = null;
     var randomNumber = Math.floor(Math.random()*4);
-    //console.log(randomNumber);
     switch (randomNumber) {
       case 0:
         currentEnemy = new Grunt();
-        console.log(0);
         break;
       case 1:
         currentEnemy = new FatGrunt();
-        console.log(1);
         break;
       case 2:
         currentEnemy = new BigGrunt();
-        console.log(2);
         break;
       case 3:
         currentEnemy = new GiantGrunt();
-        console.log(3);
         break;
     }
     currentEnemy.id = 'enemy' + i;
@@ -158,8 +160,8 @@ function enemyFactory () {
         $boss.animate({'top':'0px'},1750);
         loop++;
       } else {
-        $enemy.animate({'top':'480px'},currentEnemy.speed);
-        $boss.animate({'top':'300px'},1750);;
+        $enemy.animate({'top':'580px'},currentEnemy.speed);
+        $boss.animate({'top':'400px'},1750);;
         loop++;
         }
     }
@@ -167,34 +169,38 @@ function enemyFactory () {
     setInterval(function(){
       var randomID = makeid();
       enemy.append('<div class="eBullet" id="' + randomID + '"></div>');
-      $boss.append('<div class="giantBullet"></div>','<div class="mediumBullet"></div>','<div class="mediumBullet2"></div>');
       var $eBullet = $('.eBullet', enemy);
+      $eBullet.animate({'left':'-400px'},2990);
+      checkEnemy(enemy, 400);
+      setTimeout(function() {
+        enemy.empty();
+      }, 2990);
+    }, 3000);
+    setInterval(function(){
+      $boss.append('<div class="giantBullet"></div>','<div class="mediumBullet"></div>','<div class="mediumBullet2"></div>');
       var $giantBullet = $('.giantBullet');
       var $mediumBullet = $('.mediumBullet');
       var $mediumBullet2 = $('.mediumBullet2 ');
-      $eBullet.animate({'left':'-400px'},2990);
-      $giantBullet.animate({'left':'-300px'},2990);
-      $mediumBullet.animate({'left':'-300px'},2990);
-      $mediumBullet2.animate({'left':'-300px'},2990);
-      checkEnemy(enemy, 400);
-      checkEnemy($boss, 300);
+      $giantBullet.animate({'left':'-600px'},1990);
+      $mediumBullet.animate({'left':'-600px'},1990);
+      $mediumBullet2.animate({'left':'-600px'},1990);
+      checkEnemy($boss, 600);
       setTimeout(function() {
-        enemy.empty();
         $boss.empty();
-      }, 2990);
-    }, 3000);
+      }, 1990);
+    }, 2000);
   })($enemy);
 }
 }
 function Player1() {
-  this.health = 3000;
+  this.health = 4500;
   this.id = '';
   this.score = 0;
   this.lives = 3;
 }
 
 function Player2() {
-  this.health = 3000;
+  this.health = 4500;
   this.id = '';
   this.score = 0;
   this.lives = 3;
@@ -269,10 +275,18 @@ function check($player,target) {
       if ($player === $p2) {
         $score2.text($player.attr('score'));
       }
+      if ($p1.attr('score') > $p2.attr('score')) {
+        var winner = 'Player 1';
+      } else if ($p1.attr('score') < $p2.attr('score')) {
+        var winner = 'Player 2';
+      } else {
+        var winner = 'tie';
+      }
       if ($hitEnemy.attr('health') <= 0) {
         $hitEnemy.remove();
-
-
+        if (!document.getElementById("enemy11")) {
+          winGame(winner);
+        }
       //   window.setTimeout(function() {
       //   $hitEnemy.remove();
       // }, 1200);
@@ -292,21 +306,17 @@ function checkEnemy($eBullet, distance) {
     ){
       var previousHealth = parseInt($hitPlayer.attr('health'));
       $hitPlayer.attr('health',(previousHealth - 100));
-      if ($hitPlayer === $('#p1')) {
-        $health.text($hitPlayer.attr('health'));
-      }
-      if ($hitPlayer === $p2) {
-        $health2.text($hitPlayer.attr('health'));
-      }
+      $health.text($('#p1').attr('health'));
+      $health2.text($('#p2').attr('health'));
       if ($hitPlayer.attr('health') <= 0) {
         var previousLives = $hitPlayer.attr('lives');
         $hitPlayer.attr('lives',(previousLives - 1));
-        $hitPlayer.attr('health',(3000));
+        $hitPlayer.attr('health',(4500));
         if ($hitPlayer.attr('lives') <= 0) {
           $hitPlayer.remove();
           //http://stackoverflow.com/questions/14535733/how-to-check-if-div-element-is-empty
           if( $('.allies').is(':empty') ) {
-          endGame();
+          loseGame();
         }
 
       //   window.setTimeout(function() {
@@ -318,9 +328,20 @@ function checkEnemy($eBullet, distance) {
 }
 }
 
-function endGame() {
-  var $gg = $('<div>');
+function winGame($player) {
+  $gg.addClass('gg');
+  if ($player === 'tie') {
+    $gg.text('It is a tie!');
+  } else {
+    $gg.text($player + ' is the winner!');
+  }
+  $gameConsole.append($gg);
+  $gg.on('click', reset);
+}
+
+function loseGame() {
   $gg.addClass('gg');
   $gg.text('GAME OVER')
   $gameConsole.append($gg);
+  $gg.on('click', reset);
 }
