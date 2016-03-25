@@ -1,22 +1,33 @@
-
-var $allies = $('.allies');
-var $start = $('.start');
-var enemies = [];
-var $score = $('#p1Score');
-var $score2 = $('#p2Score');
-var $health = $('#p1Health');
-var $health2 = $('#p2Health');
-var $p1 = $('#p1');
-var $p2 = $('#p2');
-var score = 0;
-var score2 = 0;
 var $gameConsole = $('.gameConsole');
-var bossHealth = 10000;
-var $gg = $('<div>');
-var $info = $('.info');
+var $allies      = $('.allies');
+var $start       = $('.start');
+var enemies      = [];
+var $score       = $('.p1Score');
+var $score2      = $('.p2Score');
+var $health      = $('.p1Health');
+var $health2     = $('.p2Health');
+var $p1          = $('#p1');
+var $p2          = $('#p2');
+var score        = 0;
+var score2       = 0;
+var bossHealth   = 10000;
+var $gg          = $('<div>');
+var $info        = $('.info');
 
 //source http://stackoverflow.com/questions/2249203/
 //check-if-the-spacebar-is-being-pressed-and-the-mouse-is-moving-at-the-same-time
+
+$(document).ready( () => { // Will animate instructions up and down on start
+  var upAndDown = 0;
+  while (upAndDown < 500) {
+    if (upAndDown % 2 === 0) {
+      $info.animate({'top':'50px'},4000);
+    } else {
+      $info.animate({'top':'180px'},4000);;
+    }
+    upAndDown++;
+  }
+});
 
 //will creat enemies on start
 $start.on('click',newGame);
@@ -160,8 +171,8 @@ function enemyFactory () {
         $boss.animate({'top':'0px'},1750);
         loop++;
       } else {
-        $enemy.animate({'top':'580px'},currentEnemy.speed);
-        $boss.animate({'top':'400px'},1750);;
+        $enemy.animate({'top':'530px'},currentEnemy.speed);
+        $boss.animate({'top':'350px'},1750);;
         loop++;
         }
     }
