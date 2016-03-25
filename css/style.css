@@ -148,6 +148,30 @@ h3 {
   left:-175px;
 }
 
+.mediumBullet {
+  height: 10px;
+  width: 150px;
+  background-image: url(../images/mediumBullet.png);
+  padding: 0px;
+  margin: auto;
+  display:inline;
+  position:absolute;
+  top: 50px;
+  left:-175px;
+}
+
+.mediumBullet2 {
+  height: 10px;
+  width: 150px;
+  background-image: url(../images/mediumBullet.png);
+  padding: 0px;
+  margin: auto;
+  display:inline;
+  position:absolute;
+  top: 150px;
+  left:-175px;
+}
+
 .enemy {
   height: 20px;
   width: 50px;
