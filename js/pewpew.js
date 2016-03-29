@@ -17,14 +17,11 @@ var $info        = $('.info');
 //source http://stackoverflow.com/questions/2249203/
 //check-if-the-spacebar-is-being-pressed-and-the-mouse-is-moving-at-the-same-time
 
-$(document).ready( () => { // Will animate instructions up and down on start
+$(document).ready( () => { // On load, this function will execute
   var upAndDown = 0;
   while (upAndDown < 500) {
-    if (upAndDown % 2 === 0) {
-      $info.animate({'top':'50px'},4000);
-    } else {
-      $info.animate({'top':'180px'},4000);;
-    }
+    (upAndDown % 2 === 0) ? y = 50 : y = 180; // Ternary
+    $info.animate({'top': y + 'px'},4000); // Animates info div up and down
     upAndDown++;
   }
 });
