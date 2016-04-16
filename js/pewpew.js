@@ -247,7 +247,7 @@ function bulletFactory($player) {
   $bullet.animate({'left':'400px'},1200);
   //http://stackoverflow.com/questions/3655627/jquery-append-object-remove-it-with-delay
   setTimeout(function() {
-    $player.empty();
+    $bullet.remove();
   }, 1200);
   check($player);
 }
