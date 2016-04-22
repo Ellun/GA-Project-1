@@ -18,11 +18,14 @@ var $info        = $('.info');
 //check-if-the-spacebar-is-being-pressed-and-the-mouse-is-moving-at-the-same-time
 
 $(document).ready( () => { // On load, this function will execute
-  var upAndDown = 0;
-  while (upAndDown < 500) {
-    (upAndDown % 2 === 0) ? y = 50 : y = 180; // Ternary
+  upAndDown(50);
+  function upAndDown(y) {
     $info.animate({'top': y + 'px'},4000); // Animates info div up and down
-    upAndDown++;
+    if (y == 50) {
+      upAndDown(180);
+    } else {
+      upAndDown(50);
+    }
   }
 });
 
@@ -68,10 +71,17 @@ function shipFactory() {
 
 //http://stackoverflow.com/questions/7298507/move-element-with-keypress-multiple
 setInterval(onKeyDown, 20);
+
 var keys = {};
 
+$(document).keyup(function(event) {
+  if (event.keyCode == 13) {
+    shoot = false;
+  }
+})
 $(document).on('keydown', function (event) {
-  keys[event.keyCode] = true;
+  keys[event.which] = true;
+  move();
   switch (event.keyCode) {
     case 87:
       onKeyDown($p1, 'up');
@@ -85,9 +95,6 @@ $(document).on('keydown', function (event) {
     case 68:
       onKeyDown($p1, 'right');
       break;
-    case 32:
-      onKeyDown($p1, 'shoot');
-      break;
     case 73:
       onKeyDown($p2, 'up');
       break;
@@ -100,16 +107,24 @@ $(document).on('keydown', function (event) {
     case 76:
       onKeyDown($p2, 'right');
       break;
-    case 13:
-      onKeyDown($p2, 'shoot');
-      break;
     }
 });
 
 $(document).on('keyup', function(event) {
-    delete keys[event.keyCode];
+    delete keys[event.which];
 });
 
+function move() {
+  for (var i in keys) {
+        if (!keys.hasOwnProperty(i)) continue;
+          if (i == 13) {
+            bulletFactory($p2)
+          }
+          if (i == 32) {
+            bulletFactory($p1)
+          }
+    }
+}
 
 function onKeyDown($player, action) {
   switch (action) {
@@ -194,7 +209,9 @@ function enemyFactory () {
       $mediumBullet2.animate({'left':'-600px'},1990);
       checkEnemy($boss, 600);
       setTimeout(function() {
-        $boss.empty();
+        $giantBullet.remove();
+        $mediumBullet.remove();
+        $mediumBullet2.remove();
       }, 1990);
     }, 2000);
   })($enemy);
