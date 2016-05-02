@@ -15,7 +15,7 @@ const App = React.createClass({
   render : function() {
     return (
       <div>
-        hello world
+        Pew Pew
       </div>
     )
   }
