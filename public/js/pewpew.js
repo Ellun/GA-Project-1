@@ -29,7 +29,7 @@ $(document).ready( () => { // On load, this function will execute
   }
 });
 
-//will creat enemies on start
+//will create enemies on start
 $start.on('click',newGame);
 
 function reset() {
@@ -53,9 +53,9 @@ function shipFactory() {
   var player = null;
   for (var i = 1; i < 3; i++) {
     if (i === 1) {
-      player = new Player1();
+      player = new Player();
     } else if (i === 2) {
-      player = new Player2();
+      player = new Player();
     }
     var $player = $('<div>');
     $player.addClass('player');
@@ -217,14 +217,7 @@ function enemyFactory () {
   })($enemy);
 }
 }
-function Player1() {
-  this.health = 4500;
-  this.id = '';
-  this.score = 0;
-  this.lives = 3;
-}
-
-function Player2() {
+function Player() {
   this.health = 4500;
   this.id = '';
   this.score = 0;
