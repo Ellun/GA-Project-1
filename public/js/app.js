@@ -1,29 +1,24 @@
 'user strict'
+import $ from 'jquery';
+import React, {Component} from 'react';
+import ReactDOM from 'react-dom';
+import {Router, Route, Navigation, Link, browserHistory, IndexRoute} from 'react-router';
+import Player from './components/players';
 
-const $               = require('jquery');
-const React           = require('react');
-const ReactDOM        = require('react-dom')
-const ReactRouter     = require('react-router');
-const Router          = ReactRouter.Router;
-const Route           = ReactRouter.Route;
-const Navigation      = ReactRouter.Navigation;
-const Link            = ReactRouter.Link;
-const browserHistory  = ReactRouter.browserHistory;
-const IndexRoute      = ReactRouter.IndexRoute;
-
-const App = React.createClass({
-  render : function() {
+export default class App extends Component {
+  render() {
     return (
       <div>
-        Pew Pew
+        <Player player={'p1'} />
+        <Player player={'p2'} />
       </div>
     )
   }
-})
+}
 
 const routes = (
-  <Router history={ browserHistory }>
-    <Route path="/" component={ App } >
+  <Router history={browserHistory}>
+    <Route path="/" component={App} >
     </Route>
   </Router>
 )

@@ -1,3 +1,4 @@
+// import $ from 'jquery';
 var $gameConsole = $('.gameConsole');
 var $allies      = $('.allies');
 var $start       = $('.start');
